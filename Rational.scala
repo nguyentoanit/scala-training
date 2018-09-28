@@ -1,4 +1,4 @@
-class Rational(n: Int, d: Int) {
+class Rational(n: Int, d: Int) extends Ordered[Rational] {
     require(d != 0)
     private val g = gcd(n.abs, d.abs)
     val numer = n / g
@@ -6,14 +6,10 @@ class Rational(n: Int, d: Int) {
     override def toString = numer +"/"+ denom
 
     def this(n: Int) = this(n, 1) // auxiliary constructor
-    
+
     def +(that: Rational): Rational = new Rational(numer * that.denom + that.numer * denom,denom * that.denom)
     def - (that: Rational): Rational = new Rational(numer * that.denom - that.numer * denom, denom * that.denom)
     def - (i: Int): Rational = new Rational(numer - i * denom, denom)
-    def < (that: Rational) = this.numer * that.denom > that.numer * this.denom
-    def > (that: Rational) = that < this
-    def <= (that: Rational) = (this < that) || (this == that)
-    def >= (that: Rational) = (this > that) || (this == that)
 
     def lessThan(that: Rational) = this.numer * that.denom < that.numer * this.denom
     def max(that: Rational) = if (this.lessThan(that)) that else this
