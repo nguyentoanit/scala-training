@@ -1,1 +1,1 @@
-# scala-training
+# My Scala training course
