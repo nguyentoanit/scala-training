@@ -12,13 +12,6 @@ val withDefault: Option[Int] => Int = {
 println(withDefault(Some(10)))
 println(withDefault(None))
 
-
-new PartialFunction[List[Int], Int] {
-    def apply(xs: List[Int]) = xs match {
-        case x :: y :: _ => y
-    }
-    def isDefinedAt(xs: List[Int]) = xs match {
-        case x :: y :: _ => true
-        case _ => false
-    }
-}
+// Patterns in for expressions
+val capitals = Map("France" -> "Paris", "Japan" -> "Tokyo")
+for ((country, city) <- capitals) println("The capital of "+ country +" is "+ city)
