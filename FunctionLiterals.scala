@@ -13,3 +13,8 @@ println(someNumbers.filter((x: Int) => x > 0))
 println(someNumbers.filter(_ > 0))
 val f = (_: Int) + (_: Int)
 println(f(5, 10))
+
+// Partially applied functions
+def sum(a: Int, b: Int, c: Int) = a + b + c
+val a = sum _
+println (a(1, 2, 3))
