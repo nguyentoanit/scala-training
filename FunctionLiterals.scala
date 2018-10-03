@@ -16,5 +16,8 @@ println(f(5, 10))
 
 // Partially applied functions
 def sum(a: Int, b: Int, c: Int) = a + b + c
-val a = sum(1, _, _: Int)
+// Assign default values
+val a = sum(1, _:Int, _:Int)
+val b = sum _
 println (a(2,3))
+println (b(1,2,3))
