@@ -13,3 +13,7 @@ println(firstName)
 var lastName2 :: unknowParameter = names
 println(lastName2)
 println(unknowParameter)
+
+// Concatenating two lists
+var concat = List(3, 4, 5) ::: List(1, 2)
+println(concat)
