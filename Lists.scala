@@ -9,3 +9,7 @@ var names = "Nguyen" :: "Toan" :: Nil
 var List(lastName, firstName) = names
 println(lastName)
 println(firstName)
+
+var lastName2 :: unknowParameter = names
+println(lastName2)
+println(unknowParameter)
