@@ -16,3 +16,6 @@ val muta = scala.collection.mutable.Map("i" -> 1, "ii" -> 2)
 val immu = scala.collection.immutable.Map.empty ++ muta
 println(immu)
 
+// Stream
+val str = "T" #:: "O" #:: "A" #::  "N" #:: Stream.empty
+println(str)
