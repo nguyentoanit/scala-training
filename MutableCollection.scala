@@ -23,3 +23,13 @@ queue ++= "Two" :: "Three" :: Nil
 println(queue)
 println(queue.dequeue)
 println(queue)
+
+// Stacks
+println("===========Stacks==============")
+val stack = new scala.collection.mutable.Stack[String]
+stack.push("A")
+stack.push("B")
+println(stack)
+println(stack.top)
+println(stack.pop)
+println(stack)
