@@ -6,3 +6,9 @@ val moreBits = bits + 3 + 4 + 4 + 5
 println(moreBits)
 println(moreBits(2))
 println(moreBits(3))
+
+// String builders
+val buf = new StringBuilder
+buf += 'T'
+buf ++= "oan"
+println(buf)
