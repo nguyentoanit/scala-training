@@ -1,0 +1,8 @@
+ab
+bc
+cd
+da
+ac
+bc
+ca
+de
