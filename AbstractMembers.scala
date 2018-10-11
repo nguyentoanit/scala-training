@@ -11,24 +11,38 @@ class Concrete extends Abstract {
     var current = initial
 }
 
-// Abstract vals
-abstract class Fruit {
-    val v: String // ‘v’ for value
-    def m: String // ‘m’ for method
-}
-abstract class Apple extends Fruit {
-    val v: String
-    val m: String // OK to override a ‘def’ with a ‘val’
-}
-abstract class BadApple extends Fruit {
-    def v: String // ERROR: cannot override a ‘val’ with a ‘def’
-    def m: String
-}
-
 // abstract vars
 trait AbstractTime {
     def hour: Int // getter for ‘hour’
     def hour_=(x: Int) // setter for ‘hour’
     def minute: Int // getter for ‘minute’
     def minute_=(x: Int) // setter for ‘minute’
+}
+
+trait RationalTrait {
+    val numerArg: Int
+    val denomArg: Int
+    require(denomArg != 0)
+    private val g = gcd(numerArg, denomArg)
+    val numer = numerArg / g
+    val denom = denomArg / g
+    private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+    override def toString = numer +"/"+ denom
+}
+//Pre-initialized fields
+object twoThirds extends {
+    val numerArg = 2
+    val denomArg = 3
+} with RationalTrait
+
+//  Abstract types
+class Food
+abstract class Animal {
+    type SuitableFood <: Food // upper bound
+    def eat(food: SuitableFood)
+}
+class Grass extends Food
+class Cow extends Animal {
+    type SuitableFood = Grass
+    override def eat(food: Grass) {}
 }
