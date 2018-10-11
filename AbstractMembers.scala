@@ -42,7 +42,15 @@ abstract class Animal {
     def eat(food: SuitableFood)
 }
 class Grass extends Food
+class Grass2 extends Grass
 class Cow extends Animal {
     type SuitableFood = Grass
-    override def eat(food: Grass) {}
+    override def eat(food: Grass) {println("I can eat them")}
 }
+
+val grass = new Grass()
+val grass2 = new Grass2()
+val cow = new Cow()
+
+cow eat grass
+cow eat grass2
