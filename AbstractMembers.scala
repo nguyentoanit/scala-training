@@ -24,3 +24,11 @@ abstract class BadApple extends Fruit {
     def v: String // ERROR: cannot override a ‘val’ with a ‘def’
     def m: String
 }
+
+// abstract vars
+trait AbstractTime {
+    def hour: Int // getter for ‘hour’
+    def hour_=(x: Int) // setter for ‘hour’
+    def minute: Int // getter for ‘minute’
+    def minute_=(x: Int) // setter for ‘minute’
+}
