@@ -21,9 +21,7 @@ import scala.collection.mutable.ListBuffer
 import scala.util.matching.Regex
 import util.control.Breaks.break
 
-var dictionary:ListBuffer[String] = ListBuffer()
-var userDic:ListBuffer[String] = ListBuffer()
-var botDic:ListBuffer[String] = ListBuffer()
+var dictionary, userDic, botDic:ListBuffer[String] = ListBuffer()
 
 try {
     // Read dictionary and store value into the map
