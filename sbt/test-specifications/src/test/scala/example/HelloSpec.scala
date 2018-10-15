@@ -1,9 +1,6 @@
-package example
-
 import org.scalatest._
 
 class HelloSpec extends FlatSpec with Matchers {
-  "The Hello object" should "say hello" in {
-    Hello.greeting shouldEqual "hello"
-  }
+    val hello = new Hello
+    hello.sayHello("Toan") should equal ("Hello, Toan")
 }
