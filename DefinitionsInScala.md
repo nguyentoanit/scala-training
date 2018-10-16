@@ -217,6 +217,82 @@ println(stack.pop)  // prints 2
 println(stack.pop)  // prints 1
 ```
 
+# Variance
+Variance is the correlation of subtyping relationships of complex types and the subtyping relationships of their component types. Scala supports variance annotations of type parameters of generic classes, to allow them to be covariant, contravariant, or invariant if no annotations are used. The use of variance in the type system allows us to make intuitive connections between complex types, whereas the lack of variance can restrict the reuse of a class abstraction.
+```
+class Foo[+A] // A covariant class
+class Bar[-A] // A contravariant class
+class Baz[A]  // An invariant class
+```
+## Covariance
+If S is subtype of T, then List[S] is also subtype of List[T]
+```
+
+class Animal[+T](val animial:T)
+
+class Dog
+class Puppy extends Dog
+
+class AnimalCarer(val dog:Animal[Dog])
+
+object ScalaCovarianceTest{
+  def main(args: Array[String]) {
+    val puppy = new Puppy
+    val dog = new Dog
+
+    val puppyAnimal:Animal[Puppy] = new Animal[Puppy](puppy)
+    val dogAnimal:Animal[Dog] = new Animal[Dog](dog)
+
+    val dogCarer = new AnimalCarer(dogAnimal)
+    val puppyCarer = new AnimalCarer(puppyAnimal)
+
+    println("Done.")
+  }
+}
+```
+## Contravariant
+If S is subtype of T, then List[T] is also subtype of List[S]
+```
+
+abstract class Type [-T]{
+  def typeName : Unit
+}
+
+class SuperType extends Type[AnyVal]{
+  override def typeName: Unit = {
+    println("SuperType")
+  }
+}
+class SubType extends Type[Int]{
+  override def typeName: Unit = {
+    println("SubType")
+  }
+}
+
+class TypeCarer{
+  def display(t: Type[Int]){
+    t.typeName
+  }
+}
+
+object ScalaContravarianceTest {
+
+  def main(args: Array[String]) {
+    val superType = new SuperType
+    val subType = new SubType
+
+    val typeCarer = new TypeCarer
+
+    typeCarer.display(subType)
+    typeCarer.display(superType)
+  }
+
+}
+```
+> As we define Contravariance in Type[-T], it works well. TypeCarer.display() is defined with Type[Int] i.e. SubType, but still it accepts Type[AnyVal] because Scala Contravariance subtyping.
+
+## Invariance
+Generic classes in Scala are invariant by default. This means that they are neither covariant nor contravariant. In the context of the following example, Container class is invariant. A Container[Cat] is not a Container[Animal], nor is the reverse true.
 
 # References
 - https://docs.scala-lang.org/
