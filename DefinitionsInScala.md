@@ -327,7 +327,14 @@ val catContainer = new PetContainer[Cat](new Cat)
 # Lower Type Bounds
 While upper type bounds limit a type to a subtype of another type, lower type bounds declare a type to be a supertype of another type. The term B >: A expresses that the type parameter B or the abstract type B refer to a supertype of type A. In most cases, A will be the type parameter of the class and B will be the type parameter of a method.
 
-
+# Abstract Types
+Traits and abstract classes can have an abstract type member. This means that the concrete implementations define the actual type. 
+```
+trait Buffer {
+  type T
+  val element: T
+}
+```
 
 # References
 - https://docs.scala-lang.org/
