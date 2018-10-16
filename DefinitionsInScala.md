@@ -156,6 +156,18 @@ val circle1 = new Circle(5.0)
 circle1.area
 ```
 
+# Regular expressions
+Regular expressions are strings which can be used to find patterns (or lack thereof) in data. Any string can be converted to a regular expression using the .r method.
+```
+import scala.util.matching.Regex
+
+val numberPattern: Regex = "[0-9]".r
+
+numberPattern.findFirstMatchIn("awesomepassword") match {
+  case Some(_) => println("Password OK")
+  case None => println("Password must contain a number")
+}
+```
 
 # References
 - https://docs.scala-lang.org/
