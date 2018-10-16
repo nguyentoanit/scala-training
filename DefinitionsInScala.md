@@ -369,5 +369,22 @@ realBeyoncÃ©.tweet("Just spilled my glass of lemonade")  // prints "real BeyoncÃ
 ```
 Because we said this: User => in trait Tweeter, now the variable username is in scope for the tweet method. This also means that since VerifiedTweeter extends Tweeter, it must also mix-in User (using with User).
 
+# Implicit Parameters
+A method can have an implicit parameter list, marked by the implicit keyword at the start of the parameter list. If the parameters in that parameter list are not passed as usual, Scala will look if it can get an implicit value of the correct type, and if it can, pass it automatically.
+
+The places Scala will look for these parameters fall into two categories:
+- Scala will first look for implicit definitions and implicit parameters that can be accessed directly (without a prefix) at the point the method with the implicit parameter block is called.
+- Then it looks for members marked implicit in all the companion objects associated with the implicit candidate type.
+
+```
+class a {
+  implicit def add(x: Int, y: Int): Int = x+y
+  implicit def add(x: String, y: String): String = x concat y
+}
+
+val obj = new a()
+println(obj.add(1,2)) // 3
+println(obj.add("Nguyen","Toan")) // NguyenToan
+```
 # References
 - https://docs.scala-lang.org/
