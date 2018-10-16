@@ -28,7 +28,6 @@ class IntIterator(to: Int) extends Iterator[Int] {
   }
 }
 
-
 val iterator = new IntIterator(10)
 iterator.next()  // returns 0
 iterator.next()  // returns 1
@@ -42,7 +41,6 @@ Case classes are like regular classes with a few key differences which we will g
 
 ```
 case class Book(isbn: String)
-
 val frankenstein = Book("978-0486282114")
 ```
 > Notice how the keyword new was not used to instantiate the Book case class. This is because case classes have an apply method by default which takes care of object construction.
@@ -224,6 +222,7 @@ class Foo[+A] // A covariant class
 class Bar[-A] // A contravariant class
 class Baz[A]  // An invariant class
 ```
+
 ## Covariance
 If S is subtype of T, then List[S] is also subtype of List[T]
 ```
@@ -250,6 +249,7 @@ object ScalaCovarianceTest{
   }
 }
 ```
+
 ## Contravariant
 If S is subtype of T, then List[T] is also subtype of List[S]
 ```
@@ -293,6 +293,36 @@ object ScalaContravarianceTest {
 
 ## Invariance
 Generic classes in Scala are invariant by default. This means that they are neither covariant nor contravariant. In the context of the following example, Container class is invariant. A Container[Cat] is not a Container[Animal], nor is the reverse true.
+
+# Upper Type Bounds
+In Scala, type parameters and abstract types may be constrained by a type bound. Such type bounds limit the concrete values of the type variables and possibly reveal more information about the members of such types. An upper type bound T <: A declares that type variable T refers to a subtype of type A
+
+```
+abstract class Animal {
+ def name: String
+}
+
+abstract class Pet extends Animal {}
+
+class Cat extends Pet {
+  override def name: String = "Cat"
+}
+
+class Dog extends Pet {
+  override def name: String = "Dog"
+}
+
+class Lion extends Animal {
+  override def name: String = "Lion"
+}
+
+class PetContainer[P <: Pet](p: P) {
+  def pet: P = p
+}
+
+val dogContainer = new PetContainer[Dog](new Dog)
+val catContainer = new PetContainer[Cat](new Cat)
+```
 
 # References
 - https://docs.scala-lang.org/
