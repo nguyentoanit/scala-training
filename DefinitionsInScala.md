@@ -1,6 +1,7 @@
 # Definition in Scala
 ## Class
 Classes in Scala are blueprints for creating objects. They can contain methods, values, variables, types, objects, traits, and classes which are collectively called members. Types, objects, and traits will be covered later in the tour.
+
 ```
 class User
 
@@ -73,6 +74,7 @@ x match {
 
 ## Pattern guards
 Pattern guards are simply boolean expressions which are used to make cases more specific. Just add `if <boolean expression>` after the pattern.
+
 ```
 def showImportantNotification(notification: Notification, importantPeopleInfo: Seq[String]): String = {
   notification match {
@@ -99,6 +101,7 @@ println(showImportantNotification(importantSms, importantPeopleInfo))
 ```
 
 ## Matching on type only
+
 ```
 abstract class Device
 case class Phone(model: String) extends Device{
@@ -116,6 +119,7 @@ def goIdle(device: Device) = device match {
 
 ## Sealed classes
 Traits and classes can be marked sealed which means all subtypes must be declared in the same file. This assures that all subtypes are known.
+
 ```
 sealed abstract class Furniture
 case class Couch() extends Furniture
@@ -137,6 +141,7 @@ As a member of an enclosing class or as a local value, it behaves exactly like a
 
 ## Companion objects
 An object with the same name as a class is called a companion object. Conversely, the class is the object’s companion class. A companion class or object can access the private members of its companion. Use a companion object for methods and values which are not specific to instances of the companion class.
+
 ```
 import scala.math._
 
@@ -156,6 +161,7 @@ circle1.area
 
 # Regular expressions
 Regular expressions are strings which can be used to find patterns (or lack thereof) in data. Any string can be converted to a regular expression using the .r method.
+
 ```
 import scala.util.matching.Regex
 
@@ -217,6 +223,7 @@ println(stack.pop)  // prints 1
 
 # Variance
 Variance is the correlation of subtyping relationships of complex types and the subtyping relationships of their component types. Scala supports variance annotations of type parameters of generic classes, to allow them to be covariant, contravariant, or invariant if no annotations are used. The use of variance in the type system allows us to make intuitive connections between complex types, whereas the lack of variance can restrict the reuse of a class abstraction.
+
 ```
 class Foo[+A] // A covariant class
 class Bar[-A] // A contravariant class
@@ -225,8 +232,8 @@ class Baz[A]  // An invariant class
 
 ## Covariance
 If S is subtype of T, then List[S] is also subtype of List[T]
-```
 
+```
 class Animal[+T](val animial:T)
 
 class Dog
@@ -252,6 +259,7 @@ object ScalaCovarianceTest{
 
 ## Contravariant
 If S is subtype of T, then List[T] is also subtype of List[S]
+
 ```
 
 abstract class Type [-T]{
@@ -329,6 +337,7 @@ While upper type bounds limit a type to a subtype of another type, lower type bo
 
 # Abstract Types
 Traits and abstract classes can have an abstract type member. This means that the concrete implementations define the actual type. 
+
 ```
 trait Buffer {
   type T
@@ -396,6 +405,7 @@ println(obj.add("Nguyen","Toan")) // NguyenToan
 ```
 
 You can only use implicit once in a parameter list and all parameters following it will be implicit. 
+
 ```
 def example1(implicit x: Int)                       // x is implicit
 def example2(implicit x: Int, y: Int)               // x and y are implicit
@@ -404,5 +414,29 @@ def example4(x: Int)(implicit y: Int)               // only y is implicit
 def example5(implicit x: Int)(y: Int)               // wont compile
 def example6(implicit x: Int)(implicit y: Int)      // wont compile
 ```
+
+# Type Inference
+The Scala compiler can often infer the type of an expression so you don’t have to declare it explicitly.
+
+```
+val businessName = "Montreux Jazz Café"
+```
+
+For recursive methods, the compiler is not able to infer a result type. Here is a program which will fail the compiler for this reason:
+
+```
+def fac(n: Int) = if (n == 0) 1 else n * fac(n - 1)
+```
+
+It is also not compulsory to specify type parameters when polymorphic methods are called or generic classes are instantiated. The Scala compiler will infer such missing type parameters from the context and from the types of the actual method/constructor parameters.
+
+```
+case class MyPair[A, B](x: A, y: B);
+val p = MyPair(1, "scala") // type: MyPair[Int, String]
+
+def id[T](x: T) = x
+val q = id(1)              // type: Int
+```
+
 # References
 - https://docs.scala-lang.org/
