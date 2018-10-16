@@ -193,6 +193,30 @@ customer1ID match {
 ```
 > The apply method creates a CustomerID string from a name. The unapply does the inverse to get the name back. When we call CustomerID("Sukyoung"), this is shorthand syntax for calling CustomerID.apply("Sukyoung"). When we call case CustomerID(name) => println(name), we’re calling the unapply method.
 
+# Generic class
+Generic classes are classes which take a type as a parameter. They are particularly useful for collection classes.
+
+Generic classes take a type as a parameter within square brackets []. One convention is to use the letter A as type parameter identifier, though any parameter name may be used.
+
+```
+class Stack[A] {
+  private var elements: List[A] = Nil
+  def push(x: A) { elements = x :: elements }
+  def peek: A = elements.head
+  def pop(): A = {
+    val currentTop = peek
+    elements = elements.tail
+    currentTop
+  }
+}
+
+val stack = new Stack[Int]
+stack.push(1)
+stack.push(2)
+println(stack.pop)  // prints 2
+println(stack.pop)  // prints 1
+```
+
 
 # References
 - https://docs.scala-lang.org/
