@@ -130,6 +130,31 @@ def findPlaceToSit(piece: Furniture): String = piece match {
 ```
 > This is useful for pattern matching because we don’t need a “catch all” case.
 
+# Singleton object
+An object is a class that has exactly one instance. It is created lazily when it is referenced, like a lazy val.
+
+As a top-level value, an object is a singleton.
+
+As a member of an enclosing class or as a local value, it behaves exactly like a lazy val.
+
+## Companion objects
+An object with the same name as a class is called a companion object. Conversely, the class is the object’s companion class. A companion class or object can access the private members of its companion. Use a companion object for methods and values which are not specific to instances of the companion class.
+```
+import scala.math._
+
+case class Circle(radius: Double) {
+  import Circle._
+  def area: Double = calculateArea(radius)
+}
+
+object Circle {
+  private def calculateArea(radius: Double): Double = Pi * pow(radius, 2.0)
+}
+
+val circle1 = new Circle(5.0)
+
+circle1.area
+```
 
 
 # References
