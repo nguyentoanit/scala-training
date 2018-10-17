@@ -461,6 +461,18 @@ object Test extends App {
 
 > By-name parameters have the advantage that they are not evaluated if they aren’t used in the function body. On the other hand, by-value parameters have the advantage that they are evaluated only once.
 
+# Named Arguments
+When calling methods, you can label the arguments with their parameter names like so:
+
+```
+def printName(first: String, last: String): Unit = {
+  println(first + " " + last)
+}
+
+printName("John", "Smith")  // Prints "John Smith"
+printName(first = "John", last = "Smith")  // Prints "John Smith"
+printName(last = "Smith", first = "John")  // Prints "John Smith"
+```
 
 
 # References
