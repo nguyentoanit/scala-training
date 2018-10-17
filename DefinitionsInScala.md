@@ -438,5 +438,30 @@ def id[T](x: T) = x
 val q = id(1)              // type: Int
 ```
 
+# By-name Parameters
+By-name parameters are only evaluated when used. They are in contrast to by-value parameters. To make a parameter called by-name, simply prepend => to its type.
+
+```
+object Test extends App {
+
+  def time(): Long = {
+      println("In time()")
+      System.nanoTime
+  }
+
+  def exec(t: => Long): Long = {
+      println("Entered exec, calling t ...")
+      println("t = " + t)
+      println("Calling t again ...")
+      t
+  }
+  println(exec(time()))
+}
+```
+
+> By-name parameters have the advantage that they are not evaluated if they aren’t used in the function body. On the other hand, by-value parameters have the advantage that they are evaluated only once.
+
+
+
 # References
 - https://docs.scala-lang.org/
