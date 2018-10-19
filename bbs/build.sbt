@@ -12,6 +12,7 @@ libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2
 libraryDependencies += evolutions
 libraryDependencies += jdbc
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.41"
+libraryDependencies += specs2 % Test
 
 libraryDependencies ++= Seq(
   "com.h2database"  %  "h2"                           % "1.4.197", // your jdbc driver here

@@ -23,7 +23,5 @@ object Post extends SQLSyntaxSupport[Post] {
         content = rs.get(s.content)
     )
     
-    def findAll()(implicit session: DBSession = autoSession): List[Post] = withSQL {
-        select.from(Post as p)
-    }.map(Post(p)).list.apply()
+    def findAll()(implicit session: DBSession = autoSession): List[Post] = sql"SELECT ${p.result.*} FROM ${Post.as(p)}".map(Post(p)).list.apply()
 }

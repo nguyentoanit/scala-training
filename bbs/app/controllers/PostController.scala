@@ -21,10 +21,7 @@ class PostController @Inject()(cc: ControllerComponents) extends AbstractControl
    * a path of `/`.
    */
     def index() = Action { implicit request: Request[AnyContent] =>
-    implicit val session = AutoSession
-    
-    val posts = Post.findAll()
-    println(posts.toString)
-    Ok(views.html.post(posts))
+      val posts = Post.findAll()
+      Ok(views.html.post(posts))
   }
 }
