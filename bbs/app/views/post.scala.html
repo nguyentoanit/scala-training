@@ -1,23 +1,29 @@
 @(posts: List[models.Post])
 
 @main("Welcome to Play") {
-    <h1>List Post</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Content</th>
-        </tr>
-        </thead>
-        <tbody>
-            @for(post <- posts) {
-                <tr>
-                    <th scope="row">@post.id</th>
-                    <td>@post.title</td>
-                    <td>@post.content</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row">
+              <div class="col">
+                <h1>List Post</h1>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Content</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for(post <- posts) {
+                            <tr>
+                                <th scope="row">@post.id</th>
+                                <td>@post.title</td>
+                                <td>@post.content</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 }
