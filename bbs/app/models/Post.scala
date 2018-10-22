@@ -2,26 +2,31 @@ package models
 
 import scalikejdbc._
 
-case class Post(id: Long, title: String, content: String)
+case class Post(id: Long, title: String, content: String, userid: Long, email: String)
+case class User(id: Long, email: String)
+
+object User extends SQLSyntaxSupport[User]
 
 object Post extends SQLSyntaxSupport[Post] {
 
-  // If the table name is same as snake_case'd name of this companion object,
-  // you don't need to specify tableName explicitly.
-  override val tableName = "post"
-  override val columns = Seq("id", "title", "content")
+  val (p,u) = (Post.syntax("p"), User.syntax("u"))
 
-  val p = Post.syntax("p")
+  def apply(p: SyntaxProvider[Post], u:SyntaxProvider[User])(rs: WrappedResultSet): Post = apply(p.resultName, u.resultName)(rs)
+  def apply(p: ResultName[Post], u: ResultName[User])(rs: WrappedResultSet): Post = new Post(
+    id = rs.get(p.id),
+    title = rs.get(p.title),
+    content = rs.get(p.content),
+    userid = rs.get(p.userid),
+    email = rs.get(u.email)
+  )
 
-  // If you use NamedDB for this entity, override connectionPoolName
-  //override val connectionPoolName = 'anotherdb
-
-    def apply(s: SyntaxProvider[Post])(rs: WrappedResultSet): Post = apply(s.resultName)(rs)
-    def apply(s: ResultName[Post])(rs: WrappedResultSet): Post = new Post(
-        id = rs.get(s.id),
-        title = rs.get(s.title),
-        content = rs.get(s.content)
-    )
-    
-    def findAll()(implicit session: DBSession = autoSession): List[Post] = sql"SELECT ${p.result.*} FROM ${Post.as(p)}".map(Post(p)).list.apply()
+  // Find posts
+  def find(id: Long = 0)(implicit session: DBSession = autoSession): List[Post] = id match {
+    case 0 => withSQL {
+        select.from(Post as p).leftJoin(User as u).on(p.userid, u.id)
+      }.map(Post(p, u)).list.apply()
+    case _ => withSQL {
+        select.from(Post as p).leftJoin(User as u).on(p.userid, u.id).where.eq(p.id, id)
+      }.map(Post(p, u)).list.apply()
+  }
 }
