@@ -1,13 +1,13 @@
-@(post: List[models.Post])
+@(post: Posts)
 
 @main("Post Detail") {
     <div class="container">
         <div class="row">
               <div class="col">
-                <h1>@post(0).title</h1>
-                <p><i>Author: @post(0).email</i></p>
-                <p>@post(0).content</p>
-                <a href="/post/list">Back to home</a>
+                <h1>@post.title</h1>
+                <p><i>Author: @post.email</i></p>
+                <p>@post.content</p>
+                <a href="/">Back to home</a>
             </div>
         </div>
     </div>

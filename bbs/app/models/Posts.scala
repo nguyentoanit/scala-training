@@ -2,31 +2,32 @@ package models
 
 import scalikejdbc._
 
-case class Post(id: Long, title: String, content: String, userid: Long, email: String)
-case class User(id: Long, email: String)
+case class Posts(id: Long, title: String, content: String, user_id: Long, email: String)
+case class Users(id: Long, email: String)
 
-object User extends SQLSyntaxSupport[User]
+object Users extends SQLSyntaxSupport[Users]
 
-object Post extends SQLSyntaxSupport[Post] {
+object Posts extends SQLSyntaxSupport[Posts] {
 
-  val (p,u) = (Post.syntax("p"), User.syntax("u"))
+  val (p, u) = (Posts.syntax("p"), Users.syntax("u"))
 
-  def apply(p: SyntaxProvider[Post], u:SyntaxProvider[User])(rs: WrappedResultSet): Post = apply(p.resultName, u.resultName)(rs)
-  def apply(p: ResultName[Post], u: ResultName[User])(rs: WrappedResultSet): Post = new Post(
+  def apply(p: SyntaxProvider[Posts], u: SyntaxProvider[Users])(rs: WrappedResultSet): Posts = apply(p.resultName, u.resultName)(rs)
+  def apply(p: ResultName[Posts], u: ResultName[Users])(rs: WrappedResultSet): Posts = new Posts(
     id = rs.get(p.id),
     title = rs.get(p.title),
     content = rs.get(p.content),
-    userid = rs.get(p.userid),
+    user_id = rs.get(p.user_id),
     email = rs.get(u.email)
   )
 
-  // Find posts
-  def find(id: Long = 0)(implicit session: DBSession = autoSession): List[Post] = id match {
-    case 0 => withSQL {
-        select.from(Post as p).leftJoin(User as u).on(p.userid, u.id)
-      }.map(Post(p, u)).list.apply()
-    case _ => withSQL {
-        select.from(Post as p).leftJoin(User as u).on(p.userid, u.id).where.eq(p.id, id)
-      }.map(Post(p, u)).list.apply()
-  }
+  //Get all posts
+  def findAll()(implicit session: DBSession = autoSession): List[Posts] = withSQL {
+    select.from(Posts as p).leftJoin(Users as u).on(p.user_id, u.id)
+  }.map(Posts(p, u)).list.apply()
+
+  // Get post by post id
+  def find(id: Long)(implicit session: DBSession = autoSession): Option[Posts] = withSQL {
+    select.from(Posts as p).leftJoin(Users as u).on(p.user_id, u.id).where.eq(p.id, id)
+  }.map(Posts(p, u)).single.apply()
+
 }
