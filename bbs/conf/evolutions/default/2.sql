@@ -1,15 +1,16 @@
-# Post table
+# Example data
 # --- !Ups
-CREATE TABLE post (
-    id bigint(20) NOT NULL AUTO_INCREMENT,
-    userid bigint(20) NOT NULL,
-    title varchar(255),
-    content text,
-    inserted_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
-);
-
+-- Insert rows into table 'posts'
+INSERT INTO posts
+( -- columns to insert data into
+ user_id, title, content
+)
+VALUES
+    (1, "Title 1", "Content 1"),
+    (1, "Title 2", "Content 2"),
+    (1, "Title 3", "Content 3"),
+    (1, "Title 4", "Content 4"),
+    (1, "Title 5", "Content 5"),
+    (1, "Title 6", "Content 6")
 # --- !Downs
-
-DROP TABLE post;
+DELETE FROM posts
