@@ -23,7 +23,7 @@ object PostsSpecs extends Specification with DBTestTrait with AfterAll {
 
   "Posts Model Test With data" >> {
     val posts = Posts.findAll()
-    "Return type is List[Posts]" >> {
+    "When get all Posts then result type is List[Posts]" >> {
       val result = posts match {
         case _: List[Posts] => true
         case _              => false
@@ -35,10 +35,10 @@ object PostsSpecs extends Specification with DBTestTrait with AfterAll {
   "Posts Model Test No data" >> {
     clearData("posts")
     val posts = Posts.findAll()
-    "Records's number == 0" >> {
+    "When get all Posts then Records's amount == 0" >> {
       posts.size == 0
     }
-    "Return type is List[Posts]" >> {
+    "When get all Posts then result type is List[Posts]" >> {
       val result = posts match {
         case _: List[Posts] => true
         case _              => false
