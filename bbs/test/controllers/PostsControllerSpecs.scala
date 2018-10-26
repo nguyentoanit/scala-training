@@ -18,20 +18,12 @@ object PostsControllerSpecs extends Specification {
 
   "Posts Route" >> {
     "GET method has HTTP code == 200" in new WithApplication {
-      val Some(result1) = route(app, FakeRequest(GET, "/"))
-      status(result1) must equalTo(200)
+      val Some(result) = route(app, FakeRequest(GET, "/"))
+      status(result) must equalTo(200)
     }
-    "POST method has HTTP code == 404" in new WithApplication {
-      val Some(result2) = route(app, FakeRequest(POST, "/"))
-      status(result2) must equalTo(404)
-    }
-    "PUT method has HTTP code == 404" in new WithApplication {
-      val Some(result3) = route(app, FakeRequest(PUT, "/"))
-      status(result3) must equalTo(404)
-    }
-    "DELETE method has HTTP code == 404" in new WithApplication {
-      val Some(result4) = route(app, FakeRequest(DELETE, "/"))
-      status(result4) must equalTo(404)
+    "Charset is UTF-8" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/"))
+      charset(result) must beSome("utf-8")
     }
   }
 

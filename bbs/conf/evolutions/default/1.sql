@@ -1,15 +1,15 @@
-# Users schema
-
+# posts table
 # --- !Ups
-
-CREATE TABLE user (
+CREATE TABLE posts (
     id bigint(20) NOT NULL AUTO_INCREMENT,
-    email varchar(255) NOT NULL,
-    password varchar(255) NOT NULL,
-    fullname varchar(255) NOT NULL,
+    user_id bigint(20) NOT NULL,
+    title varchar(255),
+    content text,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 
 # --- !Downs
 
-DROP TABLE user;
+DROP TABLE posts;

@@ -3,20 +3,27 @@ package models
 import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
+import org.specs2.specification.AfterAll
 import scalikejdbc._
 import scalikejdbc.config._
 import scalikejdbc.specs2.AutoRollback
+import traits.DBTestTrait
+import play.api.db.evolutions.Evolutions
 
-object PostsSpecs extends Specification {
+object PostsSpecs extends Specification with DBTestTrait with AfterAll {
   sequential
-  val url = "jdbc:mysql://localhost:8889/bbs-test?useSSL=false"
-  val user = "root"
-  val password = "root"
-  ConnectionPool.singleton(url, user, password)
+  val database = getTestDatabase()
+  Evolutions.applyEvolutions(database)
+  setTestConnection()
 
-  "Posts Model Test no data" >> {
-    "Return type is List[Posts]" in new AutoRollback {
-      val posts = Posts.findAll()
+  // Clean Evolutions in Test database.
+  def afterAll() = {
+    Evolutions.cleanupEvolutions(database)
+  }
+
+  "Posts Model Test With data" >> {
+    val posts = Posts.findAll()
+    "Return type is List[Posts]" >> {
       val result = posts match {
         case _: List[Posts] => true
         case _              => false
@@ -25,10 +32,13 @@ object PostsSpecs extends Specification {
     }
   }
 
-  "Posts Model Test with data" >> {
-    "Return type is List[Posts]" in new AutoRollback {
-      for (i <- 1 to 10) Posts.create(Posts(i, i, "Title" + i, "Content" + i))
-      val posts = Posts.findAll()
+  "Posts Model Test No data" >> {
+    clearData("posts")
+    val posts = Posts.findAll()
+    "Records's number == 0" >> {
+      posts.size == 0
+    }
+    "Return type is List[Posts]" >> {
       val result = posts match {
         case _: List[Posts] => true
         case _              => false
