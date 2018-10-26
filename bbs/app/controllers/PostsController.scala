@@ -3,13 +3,15 @@ package controllers
 import javax.inject._
 import play.api._
 import play.api.mvc._
+import scalikejdbc._
+import models._
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
+ * application's Post page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class PostsController @Inject() (cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page.
@@ -19,6 +21,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+    val posts = Posts.findAll()
+    Ok(views.html.posts(posts))
   }
 }
