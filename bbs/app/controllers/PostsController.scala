@@ -28,7 +28,10 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
   // Get Post ID and show detail of Post
   def detail(id: Long) = Action { implicit request: Request[AnyContent] =>
     // Find post by ID
-    val Some(post) = Posts.find(id)
-    Ok(views.html.post_detail(post))
+    val post = Posts.find(id)
+    post match {
+      case Some(post) => Ok(views.html.post_detail(post))
+      case None       => NotFound("404 Not Found!")
+    }
   }
 }
