@@ -8,7 +8,7 @@ import scalikejdbc._
 import traits.DBTestTrait
 import play.api.db.evolutions.Evolutions
 
-object PostsSpecs extends Specification with DBTestTrait with AfterAll {
+object PostSpecs extends Specification with DBTestTrait with AfterAll {
   sequential
   val database = getTestDatabase()
   Evolutions.applyEvolutions(database)
@@ -19,39 +19,39 @@ object PostsSpecs extends Specification with DBTestTrait with AfterAll {
     Evolutions.cleanupEvolutions(database)
   }
 
-  "Posts Model Test With data" >> {
-    "When get all Posts then result type is List[Posts]" >> {
-      val posts = Posts.findAll()
+  "Post Model Test With data" >> {
+    "When get all Posts then result type is List[Post]" >> {
+      val posts = Post.findAll()
       val result = posts match {
-        case _: List[Posts] => true
-        case _              => false
+        case _: List[Post] => true
+        case _             => false
       }
       result must beTrue
     }
-    "When get a Post then result type is Option[Posts]" >> {
-      val post = Posts.find(1)
+    "When get a Post then result type is Option[Post]" >> {
+      val post = Post.getPostByID(1)
       val result = post match {
-        case _: Option[Posts] => true
-        case _                => false
+        case _: Option[Post] => true
+        case _               => false
       }
       result must beTrue
     }
   }
 
-  "Posts Model Test No data" >> {
+  "Post Model Test No data" >> {
     clearData("posts")
-    val posts = Posts.findAll()
+    val posts = Post.findAll()
     "When get all Posts then Records's amount == 0" >> {
       posts.size == 0
     }
-    "When get all Posts then result type is List[Posts]" >> {
+    "When get all Posts then result type is List[Post]" >> {
       val result = posts match {
-        case _: List[Posts] => true
-        case _              => false
+        case _: List[Post] => true
+        case _             => false
       }
       result must beTrue
     }
-    val post = Posts.find(1)
+    val post = Post.getPostByID(1)
     "When get a Post then Records's amount == 0" >> {
       post.size == 0
     }
