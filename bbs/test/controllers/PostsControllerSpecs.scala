@@ -4,15 +4,29 @@ import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
 import scalikejdbc._
+import play.api.mvc._
+import models.Posts
 
 object PostsControllerSpecs extends Specification {
 
   "Posts Controller" >> {
-    "When [Request(GET, /)] return HTTP code == 200" in new WithApplication {
-      val stubCC = stubControllerComponents()
-      val controller = new PostsController(stubCC)
+    val stubCC = stubControllerComponents()
+    val controller = new PostsController(stubCC)
+    "When send GET request to index method Return HTTP code == 200" in new WithApplication {
       val result = controller.index()(FakeRequest())
       status(result) must equalTo(200)
+    }
+    "When send GET request to detail method with valid post id Return HTTP code == 200" in new WithApplication {
+      val result = controller.detail(1)(FakeRequest())
+      status(result) must equalTo(200)
+    }
+    "When send GET request to detail method with invalid post id Return HTTP code == 404" in new WithApplication {
+      val result = controller.detail(0)(FakeRequest())
+      status(result) must equalTo(404)
+    }
+    "When send GET request to detail method with invalid post id Return \"404 Not Found!\" message" in new WithApplication {
+      val result = controller.detail(0)(FakeRequest())
+      contentAsString(result) must contain("404 Not Found!")
     }
   }
 
@@ -25,6 +39,30 @@ object PostsControllerSpecs extends Specification {
       val Some(result) = route(app, FakeRequest(GET, "/"))
       charset(result) must beSome("utf-8")
     }
+    "When [Request(GET, /post/1)] return HTTP code == 200" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/1"))
+      status(result) must equalTo(200)
+    }
+    "When [Request(GET, /post/1)] return Charset is UTF-8" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/1"))
+      charset(result) must beSome("utf-8")
+    }
+    "When [Request(GET, /post/)] return HTTP code == 404" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/"))
+      status(result) must equalTo(404)
+    }
+    "When [Request(GET, /post/xxx)] return HTTP code == 400" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/xxx"))
+      status(result) must equalTo(400)
+    }
+    "When [Request(GET, /post/0)] return HTTP code == 404" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/0"))
+      status(result) must equalTo(404)
+    }
+    "When [Request(GET, /post/0)] return \"404 Not Found!\" message" in new WithApplication {
+      val Some(result) = route(app, FakeRequest(GET, "/post/0"))
+      contentAsString(result) must contain("404 Not Found!")
+    }
   }
 
   "Posts Template" >> {
@@ -35,5 +73,19 @@ object PostsControllerSpecs extends Specification {
     "When Render Template return Content String" >> {
       contentAsString(html) must contain("Content")
     }
+  }
+
+  "Post detail Template" >> {
+    val html = views.html.post_detail(Posts(1, "Title Example", "Content Example", 1, "example@example.com"))
+    "When Render Template return title of post" >> {
+      contentAsString(html) must contain("Title Example")
+    }
+    "When Render Template return content of post" >> {
+      contentAsString(html) must contain("Content Example")
+    }
+    "When Render Template return email of author" >> {
+      contentAsString(html) must contain("example@example.com")
+    }
+
   }
 }
