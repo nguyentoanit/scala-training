@@ -5,7 +5,7 @@ import play.api.test.Helpers._
 import org.specs2.mutable._
 import scalikejdbc._
 import play.api.mvc._
-import models.Posts
+import models.Post
 
 object PostsControllerSpecs extends Specification {
 
@@ -17,15 +17,15 @@ object PostsControllerSpecs extends Specification {
       status(result) must equalTo(200)
     }
     "When send GET request to detail method with valid post id Return HTTP code == 200" in new WithApplication {
-      val result = controller.detail(1)(FakeRequest())
+      val result = controller.getPostByID(1)(FakeRequest())
       status(result) must equalTo(200)
     }
     "When send GET request to detail method with invalid post id Return HTTP code == 404" in new WithApplication {
-      val result = controller.detail(0)(FakeRequest())
+      val result = controller.getPostByID(0)(FakeRequest())
       status(result) must equalTo(404)
     }
     "When send GET request to detail method with invalid post id Return \"404 Not Found!\" message" in new WithApplication {
-      val result = controller.detail(0)(FakeRequest())
+      val result = controller.getPostByID(0)(FakeRequest())
       contentAsString(result) must contain("404 Not Found!")
     }
   }
@@ -76,7 +76,7 @@ object PostsControllerSpecs extends Specification {
   }
 
   "Post detail Template" >> {
-    val html = views.html.post_detail(Posts(1, "Title Example", "Content Example", 1, "example@example.com"))
+    val html = views.html.post_detail(Post(1, "Title Example", "Content Example", 1, "example@example.com"))
     "When Render Template return title of post" >> {
       contentAsString(html) must contain("Title Example")
     }

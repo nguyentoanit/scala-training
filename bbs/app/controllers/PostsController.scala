@@ -5,6 +5,8 @@ import play.api._
 import play.api.mvc._
 import scalikejdbc._
 import models._
+import scala.concurrent._
+// import ExecutionContext.Implicits.global
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -21,17 +23,22 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    val posts = Posts.findAll()
+    val posts = Post.findAll()
     Ok(views.html.posts(posts))
   }
 
   // Get Post ID and show detail of Post
-  def detail(id: Long) = Action { implicit request: Request[AnyContent] =>
-    // Find post by ID
-    val post = Posts.find(id)
-    post match {
-      case Some(post) => Ok(views.html.post_detail(post))
-      case None       => NotFound("404 Not Found!")
+  def getPostByID(id: Long) = Action.async { implicit request: Request[AnyContent] =>
+    Future {
+      Post.getPostByID(id)
+    } map {
+      post =>
+        {
+          val Some(p) = post
+          Ok(views.html.post_detail(p))
+        }
+    } recover {
+      case e: Exception => NotFound(e.getMessage)
     }
   }
 }
