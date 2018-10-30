@@ -7,6 +7,9 @@ import scalikejdbc._
 import models._
 import scala.concurrent._
 import ExecutionContext.Implicits.global
+import play.api.data._
+import play.api.data.Forms._
+import play.api.data.validation.Constraints._
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -40,5 +43,24 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
     } recover {
       case e: Exception => NotFound("404 Not Found!")
     }
+  }
+
+  def form() = Action { implicit request =>
+    Ok(views.html.post_form())
+  }
+
+  case class PostData(email: String, title: String, content: String)
+  val postForm = Form(
+    mapping(
+      "email" -> text,
+      "title" -> text,
+      "content" -> text
+    )(PostData.apply)(PostData.unapply)
+  )
+
+  def create() = Action(parse.form(postForm)) { implicit request =>
+    val postData = request.body
+    Ok("OK:" + postData.email + ", " + postData.title + ", " + postData.content)
+    // Redirect(routes.Application.home(id))
   }
 }
