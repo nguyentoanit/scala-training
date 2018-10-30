@@ -38,7 +38,7 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
           Ok(views.html.post_detail(p))
         }
     } recover {
-      case e: Exception => NotFound(e.getMessage)
+      case e: Exception => NotFound("404 Not Found!")
     }
   }
 }
