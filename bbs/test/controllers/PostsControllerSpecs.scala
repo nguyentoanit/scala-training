@@ -3,15 +3,18 @@ package controllers
 import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
+import org.specs2.mock.Mockito
 import scalikejdbc._
 import play.api.mvc._
 import models.Post
+import play.api.inject.guice.GuiceApplicationBuilder
 
-object PostsControllerSpecs extends Specification {
+object PostsControllerSpecs extends Specification with Mockito {
 
   "Posts Controller" >> {
-    val stubCC = stubControllerComponents()
-    val controller = new PostsController(stubCC)
+    val injector = new GuiceApplicationBuilder().injector()
+    val cc: ControllerComponents = injector.instanceOf[ControllerComponents]
+    val controller = new PostsController
     "When send GET request to index method Return HTTP code == 200" in new WithApplication {
       val result = controller.index()(FakeRequest())
       status(result) must equalTo(200)
@@ -86,6 +89,5 @@ object PostsControllerSpecs extends Specification {
     "When Render Template return email of author" >> {
       contentAsString(html) must contain("example@example.com")
     }
-
   }
 }
