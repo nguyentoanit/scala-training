@@ -14,7 +14,7 @@ object PostsControllerSpecs extends Specification with Mockito {
   "Posts Controller" >> {
     val injector = new GuiceApplicationBuilder().injector()
     val cc: ControllerComponents = injector.instanceOf[ControllerComponents]
-    val controller = new PostsController
+    val controller = new PostsController(cc)
     "When send GET request to index method Return HTTP code == 200" in new WithApplication {
       val result = controller.index()(FakeRequest())
       status(result) must equalTo(200)
@@ -79,7 +79,7 @@ object PostsControllerSpecs extends Specification with Mockito {
   }
 
   "Post detail Template" >> {
-    val html = views.html.post_detail(Post(1, "Title Example", "Content Example", 1, "example@example.com"))
+    val html = views.html.post_detail(Post(1, "example@example.com", "Title Example", "Content Example"))
     "When Render Template return title of post" >> {
       contentAsString(html) must contain("Title Example")
     }
