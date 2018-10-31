@@ -11,4 +11,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET /post/create controllers.PostsController.form()
 POST /post/create controllers.PostsController.create()
-GET /post/:id controllers.PostsController.getPostByID(id: Long)
+GET /post/:id controllers.PostsController.getByID(id: Long)

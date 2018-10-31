@@ -25,7 +25,7 @@ object PostSpecs extends Specification with DBTestTrait with AfterAll {
       posts must beAnInstanceOf[List[Post]]
     }
     "When get a Post then result type is Option[Post]" >> {
-      val post = Post.getPostByID(1)
+      val post = Post.getByID(1)
       post must beAnInstanceOf[Option[Post]]
     }
   }
@@ -39,7 +39,7 @@ object PostSpecs extends Specification with DBTestTrait with AfterAll {
     "When get all Posts then result type is List[Post]" >> {
       posts must beAnInstanceOf[List[Post]]
     }
-    val post = Post.getPostByID(1)
+    val post = Post.getByID(1)
     "When get a Post then Records's amount == 0" >> {
       post.size == 0
     }

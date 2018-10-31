@@ -20,15 +20,15 @@ object PostsControllerSpecs extends Specification with Mockito {
       status(result) must equalTo(200)
     }
     "When send GET request to detail method with valid post id Return HTTP code == 200" in new WithApplication {
-      val result = controller.getPostByID(1)(FakeRequest())
+      val result = controller.getByID(1)(FakeRequest())
       status(result) must equalTo(200)
     }
     "When send GET request to detail method with invalid post id Return HTTP code == 404" in new WithApplication {
-      val result = controller.getPostByID(0)(FakeRequest())
+      val result = controller.getByID(0)(FakeRequest())
       status(result) must equalTo(404)
     }
     "When send GET request to detail method with invalid post id Return \"404 Not Found!\" message" in new WithApplication {
-      val result = controller.getPostByID(0)(FakeRequest())
+      val result = controller.getByID(0)(FakeRequest())
       contentAsString(result) must contain("404 Not Found!")
     }
   }

@@ -31,9 +31,9 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
   }
 
   // Get Post ID and show detail of Post
-  def getPostByID(id: Long) = Action.async { implicit request: Request[AnyContent] =>
+  def getByID(id: Long) = Action.async { implicit request: Request[AnyContent] =>
     Future {
-      Post.getPostByID(id)
+      Post.getByID(id)
     } map {
       post =>
         {
@@ -60,8 +60,7 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
 
   def create() = Action(parse.form(postForm)) { implicit request =>
     val postData = request.body
-
-    Ok("OK:" + postData.email + ", " + postData.title + ", " + postData.content)
-    // Redirect(routes.Application.home(id))
+    Post.create(Post(0, postData.email, postData.title, postData.content))
+    Redirect(routes.PostsController.index())
   }
 }
