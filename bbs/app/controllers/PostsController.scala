@@ -60,6 +60,7 @@ class PostsController @Inject() (cc: ControllerComponents) extends AbstractContr
 
   def create() = Action(parse.form(postForm)) { implicit request =>
     val postData = request.body
+
     Ok("OK:" + postData.email + ", " + postData.title + ", " + postData.content)
     // Redirect(routes.Application.home(id))
   }

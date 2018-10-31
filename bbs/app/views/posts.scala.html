@@ -1,29 +1,27 @@
 @(posts: List[Post])
 
 @main("Welcome to Play") {
-    <div class="container">
-        <div class="row">
-              <div class="col">
-                <h1>List Posts</h1>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Content</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        @for(post <- posts) {
-                            <tr>
-                                <th scope="row"><a href="/post/@post.id">@post.id</a></th>
-                                <td><a href="/post/@post.id">@post.title</a></td>
-                                <td><a href="/post/@post.id">@post.content</a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h1>List Posts</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Content</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for(post <- posts) {
+                        <tr>
+                            <th scope="row"><a href="/post/@post.id">@post.id</a></th>
+                            <td><a href="/post/@post.id">@post.title</a></td>
+                            <td><a href="/post/@post.id">@post.content</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 }

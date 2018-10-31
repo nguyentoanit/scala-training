@@ -1,14 +1,12 @@
 @(post: Post)
 
 @main("Post Detail") {
-    <div class="container">
-        <div class="row">
-              <div class="col">
-                <h1>@post.title</h1>
-                <p><i>Author: @post.email</i></p>
-                <p>@post.content</p>
-                <a href="/">Back to home</a>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h1>@post.title</h1>
+            <p><i>Author: @post.email</i></p>
+            <p>@post.content</p>
+            <a href="/">Back to home</a>
         </div>
     </div>
 }
