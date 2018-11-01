@@ -3,36 +3,71 @@ package controllers
 import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
-import org.specs2.mock.Mockito
+import org.specs2.specification.AfterAll
+import org.specs2.control.Debug
 import scalikejdbc._
 import play.api.mvc._
 import models.Post
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.db.evolutions.Evolutions
+import play.api.test.CSRFTokenHelper._
+import traits.DBTestTrait
+import scalikejdbc.specs2.mutable.AutoRollback
+import org.specs2.mock.Mockito
 
-object PostsControllerSpecs extends Specification with Mockito {
+object PostsControllerSpecs extends Specification with DBTestTrait with AfterAll with Mockito {
 
+  val database = getTestDatabase()
+  Evolutions.applyEvolutions(database)
+  setTestConnection()
+
+  def afterAll() = {
+    Evolutions.cleanupEvolutions(database)
+    database.shutdown()
+  }
   "Posts Controller" >> {
     val injector = new GuiceApplicationBuilder().injector()
     val cc: ControllerComponents = injector.instanceOf[ControllerComponents]
     val controller = new PostsController(cc)
-    "When send GET request to index method Return HTTP code == 200" in new WithApplication {
-      val result = controller.index()(FakeRequest())
-      status(result) must equalTo(200)
+    "index method" >> {
+      "When send GET request Return HTTP code == 200" in new WithApplication {
+        val result = controller.index()(FakeRequest())
+        status(result) must equalTo(200)
+      }
     }
-    "When send GET request to detail method with valid post id Return HTTP code == 200" in new WithApplication {
-      val result = controller.getByID(1)(FakeRequest())
-      status(result) must equalTo(200)
+    "getByID method" >> {
+      "When send GET request with valid post id Return HTTP code == 200" in new WithApplication {
+        val result = controller.getByID(1)(FakeRequest())
+        status(result) must equalTo(200)
+      }
+      "When send GET request with invalid post id Return HTTP code == 404" in new WithApplication {
+        val result = controller.getByID(0)(FakeRequest())
+        status(result) must equalTo(404)
+      }
+      "When send GET request with invalid post id Return \"404 Not Found!\" message" in new WithApplication {
+        val result = controller.getByID(0)(FakeRequest())
+        contentAsString(result) must contain("404 Not Found!")
+      }
     }
-    "When send GET request to detail method with invalid post id Return HTTP code == 404" in new WithApplication {
-      val result = controller.getByID(0)(FakeRequest())
-      status(result) must equalTo(404)
+    "form method" >> {
+      "When send GET request Return HTTP code == 200" in new AutoRollback {
+        val result = controller.form()(FakeRequest("GET", "/").withCSRFToken)
+        status(result) must equalTo(200)
+      }
     }
-    "When send GET request to detail method with invalid post id Return \"404 Not Found!\" message" in new WithApplication {
-      val result = controller.getByID(0)(FakeRequest())
-      contentAsString(result) must contain("404 Not Found!")
+    "create method" >> {
+      "When send POST request with post form Then insert a new record into DB" in new WithApplication {
+        // implicit val mat = NoMaterializer.withNamePrefix("")
+        val old = Post.findAll().size.toString
+        val request = FakeRequest("POST", "/post/create").withFormUrlEncodedBody("email" -> "example@example.com", "title" -> "example", "content" -> "example").withCSRFToken
+        val result = call(controller.create, request)
+        val newVal = Post.findAll().size.toString
+        Debug.pp(old)
+        Debug.pp(newVal)
+        status(result) must equalTo(303)
+      }
     }
   }
-
   "Posts Route" >> {
     "When [Request(GET, /)] return HTTP code == 200" in new WithApplication {
       val Some(result) = route(app, FakeRequest(GET, "/"))
