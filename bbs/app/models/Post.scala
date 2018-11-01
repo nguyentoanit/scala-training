@@ -19,7 +19,7 @@ object Post extends SQLSyntaxSupport[Post] {
 
   //Get all posts
   def findAll()(implicit session: DBSession = autoSession): List[Post] = withSQL {
-    select.from(Post as p)
+    select.from(Post as p).orderBy(p.id).desc
   }.map(Post(p)).list.apply()
 
   // Get post by post id
